@@ -1,7 +1,4 @@
 /*
- * $Revision$
- * $Date$
- *
  * Copyright (C) 1999-2009 Jive Software. All rights reserved.
  *
  * This software is the proprietary information of Jive Software. Use is subject to license terms.
@@ -46,7 +43,6 @@
                DOM Building
             ---------------------------------------------------- */
             if (ie6) {
-                alert('ie6 alert');
                 var src = /^https/i.test(window.location.href || '') ? 'javascript:false' : 'about:blank';
                 $iframe.attr('src', src);
                 $('body').append($iframe);
