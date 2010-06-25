@@ -86,7 +86,7 @@
                      .resize(setSelfPosition)
                      .scroll(setSelfPosition)
                      .keypress(observeEscapePress);
-            $self.find(opts.closeSelector).add($overlay).click(function() { closeLightbox(); return false; });
+            $self.find(opts.closeSelector).add($overlay).click(function() { if(opts.closeClick){ closeLightbox(); return false;} });
             $self.bind('close', closeLightbox);
             $self.bind('resize', setSelfPosition);
 
@@ -119,7 +119,7 @@
 
             /* Function to bind to the window to observe the escape key press */
             function observeEscapePress(e) {
-                if(e.keyCode == 27 || (e.DOM_VK_ESCAPE == 27 && e.which==0)) closeLightbox();
+                if((e.keyCode == 27 || (e.DOM_VK_ESCAPE == 27 && e.which==0)) && opts.closeEsc) closeLightbox();
             }
 
 
