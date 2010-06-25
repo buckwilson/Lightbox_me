@@ -86,7 +86,8 @@
                      .resize(setSelfPosition)
                      .scroll(setSelfPosition)
                      .keypress(observeEscapePress);
-            $self.find(opts.closeSelector).add($overlay).click(function() { if(opts.closeClick){ closeLightbox(); return false;} });
+            $self.find(opts.closeSelector).click(function() { closeLightbox(); return false; });
+           	$overlay.click(function() { if(opts.closeClick) { closeLightbox(); return false; }});
             $self.bind('close', closeLightbox);
             $self.bind('resize', setSelfPosition);
 
