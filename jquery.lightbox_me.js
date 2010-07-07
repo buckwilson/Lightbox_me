@@ -7,7 +7,7 @@
 /*
 * $ lightbox_me
 * By: Buck Wilson
-* Version : 2.0
+* Version : 2.2
 *
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
@@ -27,17 +27,22 @@
 
     $.fn.lightbox_me = function(options) {
 
-
-
         return this.each(function() {
 
             var
                 opts = $.extend({}, $.fn.lightbox_me.defaults, options),
-                $overlay = $('<div class="' + opts.classPrefix + '_overlay"/>'),
+                $overlay = $('div.' + opts.classPrefix + '_overlay'),
                 $self = $(this),
-                $iframe = $('<iframe id="foo" style="z-index: ' + (opts.zIndex + 1) + '; display: none; border: none; margin: 0; padding: 0; position: absolute; width: 100%; height: 100%; top: 0; left: 0;"/>'),
+                $iframe = $('iframe#lb_iframe'),
                 ie6 = ($.browser.msie && $.browser.version < 7);
+            
+            if ($overlay.length > 0) {
+                $overlay[0].removeModal(); // if the overlay exists, then a modal probably exists. Ditch it!
+            } else {
+                $overlay =  $('<div class="' + opts.classPrefix + '_overlay" style="display:none;"/>'); // otherwise just create an all new overlay. 
+            }
 
+            $iframe = ($iframe.length > 0) ? $iframe : $iframe = $('<iframe id="lb_iframe" style="z-index: ' + (opts.zIndex + 1) + '; display: none; border: none; margin: 0; padding: 0; position: absolute; width: 100%; height: 100%; top: 0; left: 0;"/>');
 
             /*----------------------------------------------------
                DOM Building
@@ -49,7 +54,6 @@
             } // iframe shim for ie6, to hide select elements
             $('body').append($self).append($overlay);
 
-
             /*----------------------------------------------------
                CSS stuffs
             ---------------------------------------------------- */
@@ -59,24 +63,23 @@
             setSelfPosition();
             $self.css({left: '50%', marginLeft: ($self.outerWidth() / 2) * -1,  zIndex: (opts.zIndex + 3) });
 
-
             // set css of the overlay
 
             setOverlayHeight(); // pulled this into a function because it is called on window resize.
-            $overlay
-                    .css({ position: 'absolute', width: '100%', top: 0, left: 0, right: 0, bottom: 0, zIndex: (opts.zIndex + 2), display: 'none' })
+            $overlay.css({ position: 'absolute', width: '100%', top: 0, left: 0, right: 0, bottom: 0, zIndex: (opts.zIndex + 2) })
                     .css(opts.overlayCSS);
-
 
             /*----------------------------------------------------
                Animate it in.
             ---------------------------------------------------- */
 
-            $overlay.fadeIn(opts.overlaySpeed, function() {
+            if ($overlay.is(":hidden")) {
+                $overlay.fadeIn(opts.overlaySpeed, function() {
+                    $self[opts.appearEffect](opts.lightboxSpeed, function() { setOverlayHeight(); opts.onLoad()});
+                });
+            } else {
                 $self[opts.appearEffect](opts.lightboxSpeed, function() { setOverlayHeight(); opts.onLoad()});
-            });
-
-
+            }
 
             /*----------------------------------------------------
                Bind Events
@@ -86,43 +89,63 @@
                      .resize(setSelfPosition)
                      .scroll(setSelfPosition)
                      .keypress(observeEscapePress);
-            $self.find(opts.closeSelector).click(function() { closeLightbox(); return false; });
-           	$overlay.click(function() { if(opts.closeClick) { closeLightbox(); return false; }});
-            $self.bind('close', closeLightbox);
-            $self.bind('resize', setSelfPosition);
+            $self.find(opts.closeSelector).add($overlay).click(function() { if(opts.closeClick){ console.log('click'); removeModal(true); return false;} });
 
             
+            $self.bind('close', function() { removeModal(true) });
+            $self.bind('resize', setSelfPosition);
+            $overlay[0].removeModal = removeModal;
 
-            /*--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-              -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- */
-
+            /*----------------------------------------------------------------------------------------------------------------------------------------
+              ---------------------------------------------------------------------------------------------------------------------------------------- */
 
             /*----------------------------------------------------
                Private Functions
             ---------------------------------------------------- */
 
-            /* Remove or hide all elements */
-            function closeLightbox() {
-                if (opts.destroyOnClose) {
-                    $self.add($overlay).remove();
-                } else {
-                    $self.add($overlay).hide();
-                }
 
-                $iframe.remove();
-
-                $(window).unbind('resize', setOverlayHeight);
-                $(window).unbind('resize', setSelfPosition);
-
-                opts.onClose();
+            function removeModal(removeO) {
+                // fades & removes modal, then unbinds events
+                $self[opts.disappearEffect](opts.lightboxDisappearSpeed, function() {
+                    
+                    if (removeO) {
+                      removeOverlay();  
+                    } 
+                    
+                    opts.destroyOnClose ? $self.remove() : $self.hide()
+                    
+                    
+                    $self.find(opts.closeSelector).unbind('click');
+                    $self.unbind('close');
+                    $self.unbind('resize');
+                    $(window).unbind('scroll', setSelfPosition);
+                    $(window).unbind('resize', setSelfPosition);
+                    
+                    
+                });
             }
+            
+            
+            function removeOverlay() {
+                // fades & removes overlay, then unbinds events
+                $overlay.fadeOut(opts.overlayDisappearSpeed, function() {
+                    $(window).unbind('resize', setOverlayHeight);
+
+                    $overlay.remove();
+                    $overlay.unbind('click');
+                    
+                    
+                    opts.onClose();
+
+                })
+            }
+            
 
 
             /* Function to bind to the window to observe the escape key press */
             function observeEscapePress(e) {
-                if((e.keyCode == 27 || (e.DOM_VK_ESCAPE == 27 && e.which==0)) && opts.closeEsc) closeLightbox();
+                if((e.keyCode == 27 || (e.DOM_VK_ESCAPE == 27 && e.which==0)) && opts.closeEsc) removeModal(true);
             }
-
 
             /* Set the height of the overlay
                     : if the document height is taller than the window, then set the overlay height to the document height.
@@ -136,7 +159,6 @@
                     if (ie6) {$('html,body').css('height','100%'); } // ie6 hack for height: 100%; TODO: handle this in IE7
                 }
             }
-
 
             /* Set the position of the modal'd window ($self)
                     : if $self is taller than the window, then make it absolutely positioned
@@ -167,24 +189,24 @@
                         } else {
                             $self.css({ position: 'fixed'}).css(opts.modalCSS);
                         }
-
                     }
                 }
             }
-
         });
-
-
-
     };
 
 
     $.fn.lightbox_me.defaults = {
 
-        // animation
+        // animation when appears
         appearEffect: "fadeIn",
         overlaySpeed: 300,
         lightboxSpeed: "fast",
+        
+        // animation when dissapears
+        disappearEffect: "fadeOut",
+        overlayDisappearSpeed: 300,
+        lightboxDisappearSpeed: "fast",
 
         // close
         closeSelector: ".close",
