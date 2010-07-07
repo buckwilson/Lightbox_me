@@ -1,5 +1,5 @@
 jquery.lightbox_me.js
-version 2.0
+version 2.2
 
 Have you ever had a DOM element that you wanted lightboxed, but didn't want all the fanciness of all the lightbox-related plug-ins out there? Lightbox_me is for you.
 
@@ -38,7 +38,7 @@ limitations under the License.
 
 ## Author Information
 
-Lightbox_me was created by Buck Wilson and Jive Software.
+Lightbox_me was created by Buck Wilson for Jive Software.
 http://buckwilson.me
 http://jivesoftware.com
 
