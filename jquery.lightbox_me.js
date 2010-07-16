@@ -88,8 +88,10 @@
             $(window).resize(setOverlayHeight)
                      .resize(setSelfPosition)
                      .scroll(setSelfPosition)
-                     .keypress(observeEscapePress);
-            $self.find(opts.closeSelector).add($overlay).click(function() { if(opts.closeClick){ removeModal(true); return false;} });
+                     .keydown(observeEscapePress);
+                     
+            $self.find(opts.closeSelector).click(function() { removeModal(true); return false; });
+            $overlay.click(function() { if(opts.closeClick){ removeModal(true); return false;} });
 
             
             $self.bind('close', function() { removeModal(true) });
