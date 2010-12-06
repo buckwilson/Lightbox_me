@@ -37,6 +37,7 @@
                 ie6 = ($.browser.msie && $.browser.version < 7);
             
             if ($overlay.length > 0) {
+                $overlay[0].removeModal = removeModal;
                 $overlay[0].removeModal(); // if the overlay exists, then a modal probably exists. Ditch it!
             } else {
                 $overlay =  $('<div class="' + opts.classPrefix + '_overlay" style="display:none;"/>'); // otherwise just create an all new overlay. 
