@@ -90,7 +90,7 @@
                      .scroll(setSelfPosition)
                      .keydown(observeEscapePress);
                      
-            $self.find(opts.closeSelector).click(function() { removeModal(true); return false; });
+            $self.find(opts.closeSelector).live('click', function() { removeModal(true); return false; });
             $overlay.click(function() { if(opts.closeClick){ removeModal(true); return false;} });
 
             
