@@ -99,7 +99,7 @@
                 closeLightbox(); e.preventDefault();
             });
             $self.bind('close', closeLightbox);
-            $self.bind('resize', setSelfPosition);
+            $self.bind('reposition', setSelfPosition);
 
             
 
@@ -130,8 +130,8 @@
 				// clean up events.
                 $self.undelegate(opts.closeSelector, "click");
 
-                $(window).unbind('resize', setOverlayHeight);
-                $(window).unbind('resize', setSelfPosition);
+                $(window).unbind('reposition', setOverlayHeight);
+                $(window).unbind('reposition', setSelfPosition);
                 $(window).unbind('scroll', setSelfPosition);
                 $(window).unbind('keypress', observeKeyPress);
                 if (ie6)
