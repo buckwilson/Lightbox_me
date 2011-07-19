@@ -94,7 +94,9 @@
                      .resize(setSelfPosition)
                      .scroll(setSelfPosition)
                      .keyup(observeKeyPress);
-            $overlay.click(function(e) { closeLightbox(); e.preventDefault; });
+            if (opts.closeClick) {
+                $overlay.click(function(e) { closeLightbox(); e.preventDefault; });
+            }
             $self.delegate(opts.closeSelector, "click", function(e) {
                 closeLightbox(); e.preventDefault();
             });
