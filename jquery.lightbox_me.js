@@ -92,8 +92,10 @@
 
             $(window).resize(setOverlayHeight)
                      .resize(setSelfPosition)
-                     .scroll(setSelfPosition)
-                     .keyup(observeKeyPress);
+                     .scroll(setSelfPosition);
+                     
+            $(window).bind('keyup.lightbox_me', observeKeyPress);
+                     
             if (opts.closeClick) {
                 $overlay.click(function(e) { closeLightbox(); e.preventDefault; });
             }
@@ -135,7 +137,7 @@
                 $(window).unbind('reposition', setOverlayHeight);
                 $(window).unbind('reposition', setSelfPosition);
                 $(window).unbind('scroll', setSelfPosition);
-                $(document).unbind('keyup', observeKeyPress);
+                $(window).unbind('keyup.lightbox_me');
                 if (ie6)
                     s.removeExpression('top');
                 opts.onClose();
