@@ -65,7 +65,6 @@
 			$inner.append($self.css('display', 'inline-block'));
 			
 			/* invoke animation */
-			/* TODO: this is causing animation jitteriness! ARHGHG */
 			setTimeout(function() { $overlay.add($self).addClass(o.appearClass); }, 0); // setTimeout in case the animation is inline and not keyframed
 			
 			

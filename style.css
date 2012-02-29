@@ -109,6 +109,7 @@ a { color: #008ce5; text-decoration: none; display: inline-block; text-align: ce
 	-webkit-animation-duration: .3s;
 	-webkit-animation-timing-function: ease-in-out;
 	-webkit-animation-fill-mode: forwards;
+	opacity: 0;
 }
 .overlay {
 	opacity: 0;
