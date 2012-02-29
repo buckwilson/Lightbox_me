@@ -40,7 +40,11 @@
 				$inner 		= $(),
 				$self 		= $(this),
 				$parent 	= $self.parent(),
-				$ie7 		= ($.browser.msie && parseInt($.browser.version, 10) ===7);
+				$ie7 		= ($.browser.msie && parseInt($.browser.version, 10) ===7),
+				prefix		= "",
+				endEvent	= "animationend";
+		
+		
 		
 			/*----------------------------------------------------
 				Build DOM
@@ -61,14 +65,19 @@
 			$inner.append($self.css('display', 'inline-block'));
 			
 			/* invoke animation */
-			$self.add($overlay).addClass(o.appearClass);
+			/* TODO: this is causing animation jitteriness! ARHGHG */
+			setTimeout(function() { $overlay.add($self).addClass(o.appearClass); }, 0); // setTimeout in case the animation is inline and not keyframed
 			
 			
-			/* For IE7, we have to handle these things:
+			/* TODO: 
+				For IE7, we have to handle these things:
 				- height of overlay = height of window
 				- height of modal, ??
 			*/
 
+			/* TODO:
+				handle case where there already exists a lightbox
+			*/
 
 			/*----------------------------------------------------
 				Bind Events
@@ -113,12 +122,28 @@
 	};
 	
 	$.fn.modal.defaults = {
-		closeSelector: ".close",
 		
 		// CSS3 animation options
-		animateCSS: true,
-		appearClass: "appear",
-		exitClass: "exit"
+		animateCSS: true,				// TODO
+		appearClass: 'appear',
+		exitClass: 'exit',
+		
+		// close 
+		closeSelector: '.close',		
+		closeOverlay: true,				// TODO
+		closeEsc: true,					// TODO
+		
+		// behavior 
+		destroyOnClose: false, 			// TODO
+		showOverlay: true, 				// TODO
+		
+		// callbacks
+		onLoad: function() {},			// TODO
+		onClose: function() {},			// TODO
+		
+		// style
+		classPrefix: 'm'				// TODO
+		
       
     }
 	
