@@ -207,7 +207,7 @@
                         }
                     } else {
                         if (opts.centered) {
-                            $self.css({ position: 'fixed', top: '50%', marginTop: ($self.outerHeight() / 2) * -1})
+                            $self.css({ position: 'fixed'}).css(opts.modalCSS).css({ top: '50%', marginTop: ($self.outerHeight() / 2) * -1});
                         } else {
                             $self.css({ position: 'fixed'}).css(opts.modalCSS);
                         }
