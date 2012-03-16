@@ -57,8 +57,8 @@
 
             // set css of the overlay
             if (opts.showOverlay) {
-                setOverlayHeight(); // pulled this into a function because it is called on window resize.
-                $overlay.css({ position: 'absolute', width: '100%', top: 0, left: 0, right: 0, bottom: 0, zIndex: (opts.zIndex + 2), display: 'none' });
+                setOverlayHeightAndWidth(); // pulled this into a function because it is called on window resize.
+                $overlay.css({ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, zIndex: (opts.zIndex + 2), display: 'none' });
 				if (!$overlay.hasClass('lb_overlay_clear')){
                 	$overlay.css(opts.overlayCSS);
                 }
@@ -71,7 +71,7 @@
             if (opts.showOverlay) {
                 $overlay.fadeIn(opts.overlaySpeed, function() {
                     setSelfPosition();
-                    $self[opts.appearEffect](opts.lightboxSpeed, function() { setOverlayHeight(); setSelfPosition(); opts.onLoad()});
+                    $self[opts.appearEffect](opts.lightboxSpeed, function() { setOverlayHeightAndWidth(); setSelfPosition(); opts.onLoad()});
                 });
             } else {
                 setSelfPosition();
@@ -90,7 +90,7 @@
                Bind Events
             ---------------------------------------------------- */
 
-            $(window).resize(setOverlayHeight)
+            $(window).resize(setOverlayHeightAndWidth)
                      .resize(setSelfPosition)
                      .scroll(setSelfPosition);
                      
@@ -134,7 +134,7 @@
 				// clean up events.
                 $self.undelegate(opts.closeSelector, "click");
 
-                $(window).unbind('reposition', setOverlayHeight);
+                $(window).unbind('reposition', setOverlayHeightAndWidth);
                 $(window).unbind('reposition', setSelfPosition);
                 $(window).unbind('scroll', setSelfPosition);
                 $(window).unbind('keyup.lightbox_me');
@@ -150,11 +150,14 @@
             }
 
 
-            /* Set the height of the overlay
+            /* Set the height and width of the overlay
                     : if the document height is taller than the window, then set the overlay height to the document height.
                     : otherwise, just set overlay height: 100%
+                    :
+                    : if the document width is wider than the window, then set the overlay width to the document width.
+                    : otherwise, just set overlay width: 100%
             */
-            function setOverlayHeight() {
+            function setOverlayHeightAndWidth() {
                 if ($(window).height() < $(document).height()) {
                     $overlay.css({height: $(document).height() + 'px'});
                      $iframe.css({height: $(document).height() + 'px'}); 
@@ -164,6 +167,17 @@
                         $('html,body').css('height','100%');
                         $iframe.css('height', '100%');
                     } // ie6 hack for height: 100%; TODO: handle this in IE7
+                }
+
+                if ($(window).width() < $(document).width()) {
+                    $overlay.css({ width: $(document).width() + 'px' });
+                    $iframe.css({ width: $(document).width() + 'px' });
+                } else {
+                    $overlay.css({ width: '100%' });
+                    if (ie6) {
+                        $('html,body').css('width', '100%');
+                        $iframe.css('width', '100%');
+                    } // ie6 hack for width: 100%; TODO: handle this in IE7
                 }
             }
 
