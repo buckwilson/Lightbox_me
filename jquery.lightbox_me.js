@@ -40,15 +40,23 @@
                 }
             }
 
+            if ($self.parents('body').length > 0) {
+                // attach the lightbox and overlay to their ancestor body tag
+                $body = $self.parents('body');
+            } else {
+                $body = $('body');
+            }
+
+
             /*----------------------------------------------------
                DOM Building
             ---------------------------------------------------- */
             if (ie6) {
                 var src = /^https/i.test(window.location.href || '') ? 'javascript:false' : 'about:blank';
                 $iframe.attr('src', src);
-                $('body').append($iframe);
+                $body.append($iframe);
             } // iframe shim for ie6, to hide select elements
-            $('body').append($self.hide()).append($overlay);
+            $body.append($self.hide()).append($overlay);
 
 
             /*----------------------------------------------------
