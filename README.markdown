@@ -7,7 +7,7 @@ Lightbox_me is an essential tool for the Zepto developer's toolbox. Feed it a DO
 
 View more information at http://buckwilson.me/lightboxme
 
-* Please note * this is a Zepto port of the plugin, it will not work with Zepto
+*Please note* this is a Zepto port of the plugin, it **will not** work with jQuery!
 
 
 ## Usage
