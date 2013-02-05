@@ -28,7 +28,7 @@
                 $overlay = $(),
                 $self = $(this),
                 $iframe = $('<iframe id="foo" style="z-index: ' + (opts.zIndex + 1) + ';border: none; margin: 0; padding: 0; position: absolute; width: 100%; height: 100%; top: 0; left: 0; filter: mask();"/>'),
-                ie6 = ($.browser.msie && $.browser.version < 7);
+                ie6 = /MSIE 6/.test(navigator.userAgent) && ! window.opera;
 
             if (opts.showOverlay) {
                 //check if there's an existing overlay, if so, make subequent ones clear
