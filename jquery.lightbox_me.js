@@ -142,7 +142,7 @@
 
                   $iframe.remove();
                   
-          // clean up events.
+                  // clean up events.
                   $self.undelegate(opts.closeSelector, "click");
 
                   $(window).unbind('reposition', setOverlayHeight);
