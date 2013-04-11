@@ -68,14 +68,24 @@
                Animate it in.
             ---------------------------------------------------- */
                //
+            var lightboxSpeed, overlaySpeed;
+            if (opts.appearEffect === "show") {
+              lightboxSpeed = 0;
+              overlaySpeed = 0;
+            } else {
+              lightboxSpeed = opts.lightboxSpeed;
+              overlaySpeed = opts.overlaySpeed;
+            }
+
             if (opts.showOverlay) {
-                $overlay.fadeIn(opts.overlaySpeed, function() {
+                $overlay.fadeIn(overlaySpeed, function() {
                     setSelfPosition();
-                    $self[opts.appearEffect](opts.lightboxSpeed, function() { setOverlayHeight(); setSelfPosition(); opts.onLoad()});
+
+                    $self[opts.appearEffect](lightboxSpeed, function() { setOverlayHeight(); setSelfPosition(); opts.onLoad()});
                 });
             } else {
                 setSelfPosition();
-                $self[opts.appearEffect](opts.lightboxSpeed, function() { opts.onLoad()});
+                $self[opts.appearEffect](lightboxSpeed, function() { opts.onLoad()});
             }
 
             /*----------------------------------------------------
@@ -119,7 +129,7 @@
             function closeLightbox() {
                 var s = $self[0].style;
                 
-                lightboxSpeed = (opts.closeEffect === "hide") ? 0 : opts.lightboxSpeed;
+                var lightboxSpeed = (opts.closeEffect === "hide") ? 0 : opts.lightboxSpeed;
                 $self.add($overlay)[opts.closeEffect](lightboxSpeed, function() {
                   if (opts.destroyOnClose) {
                       $self.add($overlay).remove();
