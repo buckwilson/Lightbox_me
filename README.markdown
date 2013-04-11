@@ -1,5 +1,5 @@
 jquery.lightbox_me.js
-version 2.2
+version 2.3
 
 Have you ever had a DOM element that you wanted lightboxed, but didn't want all the fanciness of all the lightbox-related plug-ins out there? Lightbox_me is for you.
 
