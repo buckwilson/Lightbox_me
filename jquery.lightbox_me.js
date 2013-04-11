@@ -118,29 +118,31 @@
             /* Remove or hide all elements */
             function closeLightbox() {
                 var s = $self[0].style;
-                if (opts.destroyOnClose) {
-                    $self.add($overlay).remove();
-                } else {
-                    $self.add($overlay).hide();
-                }
-
-                //show the hidden parent lightbox
-                if (opts.parentLightbox) {
-                    opts.parentLightbox.fadeIn(200);
-                }
-
-                $iframe.remove();
                 
-				// clean up events.
-                $self.undelegate(opts.closeSelector, "click");
+                lightboxSpeed = (opts.closeEffect === "hide") ? 0 : opts.lightboxSpeed;
+                $self.add($overlay)[opts.closeEffect](lightboxSpeed, function() {
+                  if (opts.destroyOnClose) {
+                      $self.add($overlay).remove();
+                  }
 
-                $(window).unbind('reposition', setOverlayHeight);
-                $(window).unbind('reposition', setSelfPosition);
-                $(window).unbind('scroll', setSelfPosition);
-                $(window).unbind('keyup.lightbox_me');
-                if (ie6)
-                    s.removeExpression('top');
-                opts.onClose();
+                  //show the hidden parent lightbox
+                  if (opts.parentLightbox) {
+                      opts.parentLightbox.fadeIn(200);
+                  }
+
+                  $iframe.remove();
+                  
+          // clean up events.
+                  $self.undelegate(opts.closeSelector, "click");
+
+                  $(window).unbind('reposition', setOverlayHeight);
+                  $(window).unbind('reposition', setSelfPosition);
+                  $(window).unbind('scroll', setSelfPosition);
+                  $(window).unbind('keyup.lightbox_me');
+                  if (ie6)
+                      s.removeExpression('top');
+                  opts.onClose();
+                });
             }
 
 
@@ -231,6 +233,7 @@
         lightboxSpeed: 300,
 
         // close
+        closeEffect: "hide",
         closeSelector: ".close",
         closeClick: true,
         closeEsc: true,
