@@ -27,7 +27,18 @@
                 opts = $.extend({}, $.fn.lightbox_me.defaults, options),
                 $overlay = $(),
                 $self = $(this),
-                $iframe = $('<iframe id="foo" style="z-index: ' + (opts.zIndex + 1) + ';border: none; margin: 0; padding: 0; position: absolute; width: 100%; height: 100%; top: 0; left: 0; filter: mask();"/>'),
+                $iframe = $('<iframe id="foo"/>').css({
+                	zIndex: (opts.zIndex + 1),
+                	border: 'none',
+                	margin: 0,
+                	padding: 0,
+                	position: 'absolute',
+                	left: 0,
+                	top: 0,
+                	right: 0,
+                	bottom: 0,
+                	filter: 'mask()'
+                }),
                 ie6 = ($.browser.msie && $.browser.version < 7);
 
             if (opts.showOverlay) {
@@ -58,7 +69,16 @@
             // set css of the overlay
             if (opts.showOverlay) {
                 setOverlayHeight(); // pulled this into a function because it is called on window resize.
-                $overlay.css({ position: 'absolute', width: '100%', top: 0, left: 0, right: 0, bottom: 0, zIndex: (opts.zIndex + 2), display: 'none' });
+                $overlay.css({ 
+                	position: 'absolute', 
+                	width: '100%', 
+                	top: 0, 
+                	left: 0, 
+                	right: 0, 
+                	bottom: 0, 
+                	zIndex: (opts.zIndex + 2), 
+                	display: 'none'
+                });
 				if (!$overlay.hasClass('lb_overlay_clear')){
                 	$overlay.css(opts.overlayCSS);
                 }
