@@ -87,9 +87,9 @@
             $(window).resize(setOverlayHeight)
                      .resize(setSelfPosition)
                      .scroll(setSelfPosition);
-                     
+
             $(window).bind('keyup.lightbox_me', observeKeyPress);
-                     
+
             if (opts.closeClick) {
                 $overlay.click(function(e) { closeLightbox(); e.preventDefault; });
             }
@@ -99,7 +99,7 @@
             $self.bind('close', closeLightbox);
             $self.bind('reposition', setSelfPosition);
 
-            
+
 
             /*--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
               -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- */
@@ -172,7 +172,7 @@
                  */
 
                 // if the height of $self is bigger than the window and self isn't already position absolute
-                if (($self.height() + 80  >= $(window).height()) && ($self.css('position') != 'absolute' || ie6)) {
+                if (($self.height() + 80  >= $(window).height()) && ($self.css('position') != 'absolute')) {
 
                     // we are going to make it positioned where the user can see it, but they can still scroll
                     // so the top offset is based on the user's scroll position.
