@@ -48,7 +48,9 @@
                 $iframe.attr('src', src);
                 $('body').append($iframe);
             } // iframe shim for ie6, to hide select elements
-            $('body').append($self.hide()).append($overlay);
+            if (!opts.remainVisible){
+                $('body').append($self.hide()).append($overlay);
+            }
 
 
             /*----------------------------------------------------
@@ -238,6 +240,7 @@
         // behavior
         destroyOnClose: false,
         showOverlay: true,
+        remainVisible: false,
         parentLightbox: false,
 
         // callbacks
