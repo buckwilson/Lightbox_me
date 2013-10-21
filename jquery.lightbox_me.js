@@ -26,7 +26,8 @@
             var
                 opts = $.extend({}, $.fn.lightbox_me.defaults, options),
                 $overlay = $(),
-                $self = $(this),
+                //clone this element if we want it to remain where it is on page
+                $self = (opts.remainVisible ? $(this).clone(false) : $(this)),
                 $iframe = $('<iframe id="foo" style="z-index: ' + (opts.zIndex + 1) + ';border: none; margin: 0; padding: 0; position: absolute; width: 100%; height: 100%; top: 0; left: 0; filter: mask();"/>'),
                 ie6 = ($.browser.msie && $.browser.version < 7);
 
@@ -123,7 +124,10 @@
                 } else {
                     $self.add($overlay).hide();
                 }
-
+                //remove the cloned element if original remained visible
+                if (opts.remainVisible){
+                    $self.remove();
+                }
                 //show the hidden parent lightbox
                 if (opts.parentLightbox) {
                     opts.parentLightbox.fadeIn(200);
@@ -238,6 +242,7 @@
         // behavior
         destroyOnClose: false,
         showOverlay: true,
+        remainVisible: false,
         parentLightbox: false,
 
         // callbacks
