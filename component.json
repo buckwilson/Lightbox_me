@@ -1,0 +1,7 @@
+{
+    "name": "Lightbox_me",
+    "version": "1.0.0",
+    "dependencies": {
+          "jquery": "*"
+    }
+}
