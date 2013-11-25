@@ -39,7 +39,7 @@
                 	bottom: 0,
                 	filter: 'mask()'
                 }),
-                ie6 = ($.browser.msie && $.browser.version < 7);
+                ie6 = false;
 
             if (opts.showOverlay) {
                 //check if there's an existing overlay, if so, make subequent ones clear
