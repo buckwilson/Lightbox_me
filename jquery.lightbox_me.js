@@ -27,8 +27,7 @@
                 opts = $.extend({}, $.fn.lightbox_me.defaults, options),
                 $overlay = $(),
                 $self = $(this),
-                $iframe = $('<iframe id="foo" style="z-index: ' + (opts.zIndex + 1) + ';border: none; margin: 0; padding: 0; position: absolute; width: 100%; height: 100%; top: 0; left: 0; filter: mask();"/>'),
-                ie6 = ($.browser.msie && $.browser.version < 7);
+                $iframe = $('<iframe id="foo" style="z-index: ' + (opts.zIndex + 1) + ';border: none; margin: 0; padding: 0; position: absolute; width: 100%; height: 100%; top: 0; left: 0; filter: mask();"/>');
 
             if (opts.showOverlay) {
                 //check if there's an existing overlay, if so, make subequent ones clear
@@ -43,11 +42,6 @@
             /*----------------------------------------------------
                DOM Building
             ---------------------------------------------------- */
-            if (ie6) {
-                var src = /^https/i.test(window.location.href || '') ? 'javascript:false' : 'about:blank';
-                $iframe.attr('src', src);
-                $('body').append($iframe);
-            } // iframe shim for ie6, to hide select elements
             $('body').append($self.hide()).append($overlay);
 
 
@@ -93,9 +87,9 @@
             $(window).resize(setOverlayHeight)
                      .resize(setSelfPosition)
                      .scroll(setSelfPosition);
-                     
+
             $(window).bind('keyup.lightbox_me', observeKeyPress);
-                     
+
             if (opts.closeClick) {
                 $overlay.click(function(e) { closeLightbox(); e.preventDefault; });
             }
@@ -105,7 +99,7 @@
             $self.bind('close', closeLightbox);
             $self.bind('reposition', setSelfPosition);
 
-            
+
 
             /*--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
               -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- */
@@ -130,7 +124,7 @@
                 }
 
                 $iframe.remove();
-                
+
 				// clean up events.
                 $self.undelegate(opts.closeSelector, "click");
 
@@ -138,8 +132,6 @@
                 $(window).unbind('reposition', setSelfPosition);
                 $(window).unbind('scroll', setSelfPosition);
                 $(window).unbind('keyup.lightbox_me');
-                if (ie6)
-                    s.removeExpression('top');
                 opts.onClose();
             }
 
@@ -157,13 +149,9 @@
             function setOverlayHeight() {
                 if ($(window).height() < $(document).height()) {
                     $overlay.css({height: $(document).height() + 'px'});
-                     $iframe.css({height: $(document).height() + 'px'}); 
+                     $iframe.css({height: $(document).height() + 'px'});
                 } else {
                     $overlay.css({height: '100%'});
-                    if (ie6) {
-                        $('html,body').css('height','100%');
-                        $iframe.css('height', '100%');
-                    } // ie6 hack for height: 100%; TODO: handle this in IE7
                 }
             }
 
@@ -184,34 +172,18 @@
                  */
 
                 // if the height of $self is bigger than the window and self isn't already position absolute
-                if (($self.height() + 80  >= $(window).height()) && ($self.css('position') != 'absolute' || ie6)) {
+                if (($self.height() + 80  >= $(window).height()) && ($self.css('position') != 'absolute')) {
 
                     // we are going to make it positioned where the user can see it, but they can still scroll
                     // so the top offset is based on the user's scroll position.
                     var topOffset = $(document).scrollTop() + 40;
                     $self.css({position: 'absolute', top: topOffset + 'px', marginTop: 0})
-                    if (ie6) {
-                        s.removeExpression('top');
-                    }
                 } else if ($self.height()+ 80  < $(window).height()) {
                     //if the height is less than the window height, then we're gonna make this thing position: fixed.
-                    // in ie6 we're gonna fake it.
-                    if (ie6) {
-                        s.position = 'absolute';
-                        if (opts.centered) {
-                            s.setExpression('top', '(document.documentElement.clientHeight || document.body.clientHeight) / 2 - (this.offsetHeight / 2) + (blah = document.documentElement.scrollTop ? document.documentElement.scrollTop : document.body.scrollTop) + "px"')
-                            s.marginTop = 0;
-                        } else {
-                            var top = (opts.modalCSS && opts.modalCSS.top) ? parseInt(opts.modalCSS.top) : 0;
-                            s.setExpression('top', '((blah = document.documentElement.scrollTop ? document.documentElement.scrollTop : document.body.scrollTop) + '+top+') + "px"')
-                        }
+                    if (opts.centered) {
+                        $self.css({ position: 'fixed', top: '50%', marginTop: ($self.outerHeight() / 2) * -1})
                     } else {
-                        if (opts.centered) {
-                            $self.css({ position: 'fixed', top: '50%', marginTop: ($self.outerHeight() / 2) * -1})
-                        } else {
-                            $self.css({ position: 'fixed'}).css(opts.modalCSS);
-                        }
-
+                        $self.css({ position: 'fixed'}).css(opts.modalCSS);
                     }
                 }
             }
