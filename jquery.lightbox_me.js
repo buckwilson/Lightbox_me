@@ -127,11 +127,13 @@
                 }
                 $iframe.remove();
 
-				// clean up events.
+				        // clean up events.
                 $self.undelegate(opts.closeSelector, "click");
-
-                $(window).unbind('reposition', setOverlayHeight);
-                $(window).unbind('reposition', setSelfPosition);
+                $self.unbind('close', closeLightbox);
+                $self.unbind('repositon', setSelfPosition);
+                
+                $(window).unbind('resize', setOverlayHeight);
+                $(window).unbind('resize', setSelfPosition);
                 $(window).unbind('scroll', setSelfPosition);
                 $(window).unbind('keyup.lightbox_me');
                 opts.onClose();
