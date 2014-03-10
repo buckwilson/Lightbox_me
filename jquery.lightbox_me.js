@@ -65,11 +65,19 @@
             if (opts.showOverlay) {
                 $overlay.fadeIn(opts.overlaySpeed, function() {
                     setSelfPosition();
-                    $self[opts.appearEffect](opts.lightboxSpeed, function() { setOverlayHeight(); setSelfPosition(); opts.onLoad()});
+                    $self[opts.appearEffect](opts.lightboxSpeed, function() { 
+                        setOverlayHeight(); 
+                        setSelfPosition(); 
+                        bindEvents();
+                        opts.onLoad();
+                    });
                 });
             } else {
                 setSelfPosition();
-                $self[opts.appearEffect](opts.lightboxSpeed, function() { opts.onLoad()});
+                $self[opts.appearEffect](opts.lightboxSpeed, function() { 
+                    bindEvents();
+                    opts.onLoad();
+                });
             }
 
             /*----------------------------------------------------
@@ -84,20 +92,22 @@
                Bind Events
             ---------------------------------------------------- */
 
-            $(window).resize(setOverlayHeight)
-                     .resize(setSelfPosition)
-                     .scroll(setSelfPosition);
+            function bindEvents() {
+                $(window).resize(setOverlayHeight)
+                         .resize(setSelfPosition)
+                         .scroll(setSelfPosition);
 
-            $(window).bind('keyup.lightbox_me', observeKeyPress);
+                $(document).on('keyup.lightbox_me', observeKeyPress);
 
-            if (opts.closeClick) {
-                $overlay.click(function(e) { closeLightbox(); e.preventDefault; });
+                if (opts.closeClick) {
+                    $overlay.click(function(e) { closeLightbox(); e.preventDefault; });
+                }
+                $self.on("click", opts.closeSelector, function(e) {
+                    closeLightbox(); e.preventDefault();
+                });
+                $self.on('close', closeLightbox);
+                $self.on('reposition', setSelfPosition);
             }
-            $self.delegate(opts.closeSelector, "click", function(e) {
-                closeLightbox(); e.preventDefault();
-            });
-            $self.bind('close', closeLightbox);
-            $self.bind('reposition', setSelfPosition);
 
 
 
@@ -128,19 +138,19 @@
                 $iframe.remove();
 
 				        // clean up events.
-                $self.undelegate(opts.closeSelector, "click");
-                $self.unbind('close', closeLightbox);
-                $self.unbind('repositon', setSelfPosition);
+                $self.off(opts.closeSelector, "click");
+                $self.off('close', closeLightbox);
+                $self.off('repositon', setSelfPosition);
                 
-                $(window).unbind('resize', setOverlayHeight);
-                $(window).unbind('resize', setSelfPosition);
-                $(window).unbind('scroll', setSelfPosition);
-                $(window).unbind('keyup.lightbox_me');
+                $(window).off('resize', setOverlayHeight);
+                $(window).off('resize', setSelfPosition);
+                $(window).off('scroll', setSelfPosition);
+                $(document).off('keyup.lightbox_me');
                 opts.onClose();
             }
 
 
-            /* Function to bind to the window to observe the escape/enter key press */
+            /* Function to on to the window to observe the escape/enter key press */
             function observeKeyPress(e) {
                 if((e.keyCode == 27 || (e.DOM_VK_ESCAPE == 27 && e.which==0)) && opts.closeEsc) closeLightbox();
             }
