@@ -1,7 +1,7 @@
 /*
 * $ lightbox_me
 * By: Buck Wilson
-* Version : 2.4
+* Version : 2.5
 *
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
@@ -16,8 +16,18 @@
 * limitations under the License.
 */
 
-
-(function($) {
+(function(factory) {
+    if (typeof define === 'function' && define.amd) {
+        // AMD
+        define(['jquery'], factory);
+    } else if (typeof exports === 'object') {
+        // CommonJS
+        factory(require('jquery'));
+    } else {
+        // Browser globals
+        factory(jQuery);
+    }
+}(function($) {
 
     $.fn.lightbox_me = function(options) {
 
@@ -131,7 +141,7 @@
                 $self.undelegate(opts.closeSelector, "click");
                 $self.unbind('close', closeLightbox);
                 $self.unbind('repositon', setSelfPosition);
-                
+
                 $(window).unbind('resize', setOverlayHeight);
                 $(window).unbind('resize', setSelfPosition);
                 $(window).unbind('scroll', setSelfPosition);
@@ -231,4 +241,4 @@
         modalCSS: {top: '40px'},
         overlayCSS: {background: 'black', opacity: .3}
     }
-})(jQuery);
+}))
