@@ -1,5 +1,5 @@
 # jquery.lightbox_me.js #
-**version 2.2**
+**version 2.5**
 
 Have you ever had a DOM element that you wanted lightboxed, but didn't want all the fanciness of all the lightbox-related plug-ins out there? Lightbox_me is for you.
 
@@ -14,6 +14,8 @@ View more information at http://buckwilson.me/lightboxme
 Lightbox_me is a jQuery plugin and requires jQuery to be included in order to work.
 
 Include both jQuery and the lightbox_me JavaScript file before calling the plugin in your JavaScript.
+
+Alternatively, you can use AMD or CommonJS module loader.
 
 Invoke the lightbox by calling the plugin on a jQuery object:
 
