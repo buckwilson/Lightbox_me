@@ -91,7 +91,7 @@
             $(window).bind('keyup.lightbox_me', observeKeyPress);
 
             if (opts.closeClick) {
-                $overlay.click(function(e) { closeLightbox(); e.preventDefault; });
+                $overlay.click(function(e) { closeLightbox(); e.preventDefault(); });
             }
             $self.delegate(opts.closeSelector, "click", function(e) {
                 closeLightbox(); e.preventDefault();
